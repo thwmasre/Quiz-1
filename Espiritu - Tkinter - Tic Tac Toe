@@ -4,46 +4,46 @@ from tkinter import messagebox
 root = tk.Tk()
 root.title("Tic Tac Toe")
 
-current_player = "X"
+player = "X"
 board = [""] * 9
 buttons = []
 
-def check_winner(player):
-    wins = [
-        (0,1,2),(3,4,5),(6,7,8),
-        (0,3,6),(1,4,7),(2,5,8),
-        (0,4,8),(2,4,6)
-    ]
+def winner(p):
+    wins = [(0,1,2),(3,4,5),(6,7,8),
+            (0,3,6),(1,4,7),(2,5,8),
+            (0,4,8),(2,4,6)]
+
     for a,b,c in wins:
-        if board[a] == board[b] == board[c] == player:
+        if board[a] == p and board[b] == p and board[c] == p:
             return True
     return False
 
-def button_click(i):
-    global current_player
+def click(i):
+    global player
 
-    if board[i] == "":
-        board[i] = current_player
-        buttons[i]["text"] = current_player
+    if board[i] != "":
+        return
 
-        if check_winner(current_player):
-            messagebox.showinfo("Game Over", "Player " + current_player + " wins!")
-            root.destroy()
-            return
+    board[i] = player
+    buttons[i]["text"] = player
 
-        if "" not in board:
-            messagebox.showinfo("Game Over", "It's a draw!")
-            root.destroy()
-            return
+    if winner(player):
+        messagebox.showinfo("Result", player + " wins!")
+        root.destroy()
 
-        if current_player == "X":
-            current_player = "O"
+    elif "" not in board:
+        messagebox.showinfo("Result", "Draw!")
+        root.destroy()
+
+    else:
+        if player == "X":
+            player = "O"
         else:
-            current_player = "X"
+            player = "X"
 
 for i in range(9):
-    btn = tk.Button(root, text="", width=10, height=4,
-                    command=lambda i=i: button_click(i))
+    btn = tk.Button(root, text="", width=8, height=3,
+                    command=lambda i=i: click(i))
     btn.grid(row=i//3, column=i%3)
     buttons.append(btn)
 
